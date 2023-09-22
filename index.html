@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Para Ti, Te Amo</title>
+    <style>
+        body {
+            background-color: #ffffcc; /* Color de fondo amarillo claro */
+            text-align: center;
+            font-family: Arial, sans-serif;
+        }
+        h1 {
+            color: #ff9900; /* Color de texto naranja */
+        }
+        .flowers {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        .flower {
+            width: 150px;
+            height: 150px;
+            background-image: url('https://static.vecteezy.com/system/resources/previews/001/190/731/original/flower-yellow-png.png');
+            background-size: cover;
+            margin: 10px;
+        }
+        .falling-flower {
+            position: absolute;
+            width: 30px; /* Tamaño más pequeño para las flores */
+            height: 30px; /* Tamaño más pequeño para las flores */
+            background-image: url('https://static.vecteezy.com/system/resources/previews/001/190/731/original/flower-yellow-png.png'); /* Cambia la ruta de la imagen si es necesario */
+            background-size: cover;
+            animation: moveFlower 10s linear infinite; /* Animación para mover las flores */
+        }
+
+        @keyframes moveFlower {
+            0% {
+                transform: translate(0, 0);
+            }
+            100% {
+                transform: translate(calc(100vw - 30px), calc(100vh - 30px));
+            }
+        }
+        #message {
+            font-size: 24px;
+            color: #ff9900;
+            margin-top: 20px;
+        }
+        #addFlowerButton {
+            background-color: #ff9900;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h1>Para ti mi Cielo 😚💛</h1>
+    <div class="flowers" id="flowerContainer">
+        <!-- Flores iniciales -->
+        <div class="flower"></div>
+        <div class="flower"></div>
+        <div class="flower"></div>
+        <div class="flower"></div>
+        <div class="flower"></div>
+        <div class="flower"></div>
+    </div>
+    <button id="addFlowerButton">Agregar Flor</button>
+    <p id="message">Hola mi amor</p>
+    <p id="message">PSDT: No podré darte flores amarillas reales, pero si puedo hacer esto :3</p>
+    <p id="message">Te amo mucho mi Cielito 💛</p>
+    <script>
+        const flowerContainer = document.getElementById("flowerContainer");
+        const addFlowerButton = document.getElementById("addFlowerButton");
+        const konamiCode = "STEFANY"; // Código Konami
+        let flowerCount = 5; // Inicialmente, hay 5 flores en la primera fila
+        let konamiCodeIndex = 0;
+        let flowerImages = [];
+
+        addFlowerButton.addEventListener("click", function () {
+            if (flowerCount % 5 === 0) {
+                // Agregar una nueva fila al contenedor
+                const newRow = document.createElement("div");
+                newRow.classList.add("flowers");
+                flowerContainer.appendChild(newRow);
+            }
+
+            // Agregar una nueva flor a la fila actual
+            const newFlower = document.createElement("div");
+            newFlower.classList.add("flower");
+            newFlower.style.backgroundImage = "url('https://static.vecteezy.com/system/resources/previews/001/190/731/original/flower-yellow-png.png')"; // Cambia la ruta de la imagen si es necesario
+            flowerContainer.lastElementChild.appendChild(newFlower);
+
+            flowerCount++;
+        });
+
+        // Función para manejar la detección del código Konami
+        function checkKonamiCode(event) {
+            if (event.key.toUpperCase() === konamiCode[konamiCodeIndex]) {
+                konamiCodeIndex++;
+                if (konamiCodeIndex === konamiCode.length) {
+                    // Código Konami completo
+                    showFallingFlowers();
+                    konamiCodeIndex = 0;
+
+                    // Cerrar después de 10 segundos
+                    setTimeout(() => {
+                        hideFallingFlowers();
+                    }, 10000);
+                }
+            } else {
+                konamiCodeIndex = 0;
+            }
+        }
+
+        // Función para mostrar las flores cayendo
+        function showFallingFlowers() {
+            const numFlowers = 30; // Cambia la cantidad de flores si es necesario
+
+            for (let i = 0; i < numFlowers; i++) {
+                const flowerImage = document.createElement("div");
+                flowerImage.classList.add("falling-flower");
+                flowerImages.push(flowerImage);
+                document.body.appendChild(flowerImage);
+                animateFallingFlower(flowerImage);
+            }
+        }
+
+        // Función para animar las flores cayendo
+        function animateFallingFlower(flowerImage) {
+            const screenWidth = window.innerWidth;
+            const screenHeight = window.innerHeight;
+            const startPositionX = Math.random() * screenWidth;
+            const duration = Math.random() * 5 + 3; // Duración de la animación entre 3 y 8 segundos
+
+            flowerImage.style.left = startPositionX + "px";
+            flowerImage.style.top = "-30px";
+            flowerImage.style.animation = `moveFlower ${duration}s linear`;
+
+            flowerImage.addEventListener("animationend", () => {
+                // Eliminar la flor cuando termine la animación
+                document.body.removeChild(flowerImage);
+                flowerImages.splice(flowerImages.indexOf(flowerImage), 1);
+            });
+        }
+        
+        // Función para ocultar las flores
+        function hideFallingFlowers() {
+            for (const flowerImage of flowerImages) {
+                document.body.removeChild(flowerImage);
+            }
+            flowerImages.length = 0; // Limpiar el arreglo de imágenes
+        }
+
+        // Agregar un event listener para escuchar las teclas presionadas
+        window.addEventListener("keydown", checkKonamiCode);
+    </script>
+</body>
+</html>
